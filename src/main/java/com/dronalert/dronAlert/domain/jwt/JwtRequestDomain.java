@@ -10,7 +10,7 @@ public class JwtRequestDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)  // Generación automática de UUID
-    @Column(name = "user_id")
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "email")     // Credencial de autenticación: email

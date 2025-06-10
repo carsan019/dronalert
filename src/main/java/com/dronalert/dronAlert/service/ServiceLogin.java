@@ -6,7 +6,7 @@ import com.dronalert.dronAlert.domain.jwt.JwtResponseDomain;
 import com.dronalert.dronAlert.crosscutting.exceptions.EmailValidator;
 import com.dronalert.dronAlert.crosscutting.exceptions.InvalidCredentialsException;
 import com.dronalert.dronAlert.crosscutting.exceptions.UserNotFoundException;
-import com.dronalert.dronAlert.repository.RepositoryLogin;
+import com.dronalert.dronAlert.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,11 @@ import java.util.Optional;
 public class ServiceLogin {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final RepositoryLogin repositoryLogin;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ServiceLogin(RepositoryLogin repositoryLogin) {
-        this.repositoryLogin = repositoryLogin;
+    public ServiceLogin(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public JwtResponseDomain authenticateUser(JwtRequestDomain authenticationRequest) {
@@ -35,7 +35,7 @@ public class ServiceLogin {
         }
 
         // Buscar el usuario en la base de datos
-        Optional<JwtRequestDomain> optionalUser = repositoryLogin.findByEmail(authenticationRequest.getEmail());
+        Optional<JwtRequestDomain> optionalUser = userRepository.findByEmail(authenticationRequest.getEmail());
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException("Usuario no encontrado");
         }

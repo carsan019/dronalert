@@ -1,6 +1,6 @@
 package com.dronalert.dronAlert.service;
 
-import com.dronalert.dronAlert.domain.UserDomain;
+import com.dronalert.dronAlert.domain.jwt.JwtRequestDomain;
 import com.dronalert.dronAlert.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
@@ -16,9 +16,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDomain user = userRepository.findByEmail(email)
+        JwtRequestDomain user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        return new User(user.getEmail(), user.getPassword(), Collections.emptyList());
+        return new User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.emptyList()
+        );
     }
 }
